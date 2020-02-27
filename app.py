@@ -6,38 +6,27 @@ import dash_html_components as html
 
 import pandas as pd
 import sqlite3 as sql
+from hero_scrape import fetch_hero_list
 
-def generate_table(dataframe, max_rows=10):
-    return html.Table(
-        # Header
-        [html.Tr([html.Th(col) for col in dataframe.columns])] +
+#external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-        # Body
-        [html.Tr([html.Td(dataframe.iloc[i][col]) for col in dataframe.columns]) for i in range(min(len(dataframe), max_rows))]
-    )
-
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
+app = dash.Dash(__name__) #, external_stylesheets=external_stylesheets
 
 app.layout = html.Div(children=[
     html.H1('BG Tracker'),
 
     html.Div('Made using Dash: A web application framework for Python.'),
 
+    # hero selection
     dcc.Dropdown(
-        options=[
-        {'label':"Yogg", 'value':"Yogg"},
-        {'label':"Edwin", 'value':"Edwin"},
-        {'label':"Deryl", 'value':"Deryl"}
-        ],
+        options=[{'label':hero, 'value':hero} for hero in fetch_hero_list()],
         id="dropdown_hero",
         style={"margin-top":"20px", "margin-bottom":"20px"},
         searchable=False,
         clearable=False
     ),
 
+    # position selection
     dcc.Slider(
         min=1,
         max=8,
@@ -58,8 +47,10 @@ app.layout = html.Div(children=[
         id="position_slider"
     ),
 
+    # submit new run button
     html.Button('Submit', id='button', style={"margin-top":"20px", "margin-bottom":"20px"}),
 
+    # ackknledgment of successful submission to DB
     html.Div(id='submit_ack'),
 
     html.Div(id="my-div"),
