@@ -1,0 +1,12 @@
+.submit_button{
+    margin-top:20px;
+    margin-bottom:20px;
+    border-style:outset;
+    text-shadow:none;
+    background-color: #add8e6;
+}
+
+.submit_button:hover{
+    cursor: pointer;
+    background-color: #666;
+}
